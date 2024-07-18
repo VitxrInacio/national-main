@@ -2,13 +2,10 @@ package configuration.national;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,9 +17,9 @@ public class SecurityConfiguration {
                 http
                                 .authorizeHttpRequests((authorize) -> authorize
                                                 .requestMatchers("/").permitAll()
-                                                .requestMatchers("/login").permitAll()
-                                                .requestMatchers("/manager").hasAuthority("ADMIN")
-                                                .requestMatchers("/users").hasAuthority("USER")
+                                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                                .requestMatchers("/managers").hasAnyRole("MANAGERS")
+                                                .requestMatchers("/users").hasAnyRole("USERS")
                                                 .anyRequest().authenticated())
                                                 
                                 .httpBasic(withDefaults());
@@ -30,7 +27,7 @@ public class SecurityConfiguration {
                 return http.build();
         }
 
-        @Bean
+       /*  @Bean
         public UserDetailsService userDetailsService() throws Exception {
                 // ensure the passwords are encoded properly
                 @SuppressWarnings("deprecation")
@@ -39,5 +36,5 @@ public class SecurityConfiguration {
                 manager.createUser(users.username("user").password("password").roles("USER").build());
                 manager.createUser(users.username("admin").password("password").roles(  "ADMIN").build());
                 return manager;
-        }
+        }*/
 }

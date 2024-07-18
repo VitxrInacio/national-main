@@ -15,7 +15,7 @@ public class WelcomeController {
         return "Usuário autorizado";
     }
 
-    @GetMapping("/manager")
+    @GetMapping("/managers")
     public String managers() {
         return "Gerente autorizado";
     }
